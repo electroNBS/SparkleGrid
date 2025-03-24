@@ -1,0 +1,15 @@
+<!-- measurements.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Measurements</title>
+</head>
+<body>
+    <h1>Measurements Data</h1>
+    <ul>
+        {% for measurement in measurements %}
+            <li>Voltage: {{ measurement.voltage }}, Time: {{ measurement.time }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
