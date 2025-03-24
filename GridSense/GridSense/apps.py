@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class MicrogridBackConfig(AppConfig):
+class GridsenseAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'microgrid_back'
+    name = 'GridSense' # Keeping the app name as GridSense as per original apps.py

@@ -92,7 +92,7 @@
       const currentTime = new Date()
       const currentHour = currentTime.getHours()
       const tableNumber = Math.floor(currentHour / 4) + 1 // Calculate table number based on time
-      const url = `http://localhost:8000/microgrid_back/measurements/6/${sensorNumber}/`
+      const url = `http://127.0.0.1:8000/measurements/6/${sensorNumber}/`
   
       const response = await axios.get(url)
       const data: SensdataMeasurement = response.data.measurements

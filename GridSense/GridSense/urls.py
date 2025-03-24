@@ -1,13 +1,23 @@
+# from django.contrib import admin
+# from django.urls import path, include
+# from graphene_django.views import GraphQLView
+# from django.views.decorators.csrf import csrf_exempt
+# from GridSense.schema import schema # Updated app name
+# from GridSense.views import measurements_by_sensor_id
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+    
+#     # path('gridsense_app/', include('GridSense.urls')), # Updated to gridsense_app, assuming you might want to rename app urls path
+#     path('measurements/<int:table_no>/<int:sensor_id>/', measurements_by_sensor_id, name='measurements_by_sensor_id'),
+# ]
+
+# /home/mgrid/development/microgrid-iot/GridSense/GridSense/urls.py
+from django.contrib import admin
 from django.urls import path
-from . import views
-
-
+from GridSense.views import measurements_by_sensor_id
 
 urlpatterns = [
-    # Define your app-specific URLs here
-    # For example:
-    # path('measurements/', views.MeasurementListView.as_view(), name='measurement-list'),
-    # path('measurements/<int:pk>/', views.MeasurementDetailView.as_view(), name='measurement-detail'),
-    
-    path('measurements/<int:table_no>/<int:sensor_id>/', views.measurements_by_sensor_id, name='measurements_by_sensor_id'),
+    path('admin/', admin.site.urls),
+    path('measurements/<int:table_no>/<int:sensor_id>/', measurements_by_sensor_id, name='measurements_by_sensor_id'),
 ]

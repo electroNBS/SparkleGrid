@@ -23,19 +23,25 @@ class MeasurementModel(models.Model):
         return f"Sensor ID: {self.sensor_id}, Sensdata: {self.sensdata}, Time: {self.time}, RMS: {self.rmsvalue}, PF: {self.pf}, THD: {self.thd}, Name: {self.sname}, Type: {self.stype}"
 
 class MeasurementsOne(MeasurementModel):
-    pass
+    class Meta:
+        db_table = 'measurements_one' # Added explicit table names for clarity and potential future migrations
 
 class MeasurementsTwo(MeasurementModel):
-    pass
+    class Meta:
+        db_table = 'measurements_two'
 
 class MeasurementsThree(MeasurementModel):
-    pass
+    class Meta:
+        db_table = 'measurements_three'
 
 class MeasurementsFour(MeasurementModel):
-    pass
+    class Meta:
+        db_table = 'measurements_four'
 
 class MeasurementsFive(MeasurementModel):
-    pass
+    class Meta:
+        db_table = 'measurements_five'
 
 class MeasurementsSix(MeasurementModel):
-    pass
+    class Meta:
+        db_table = 'measurements_six'

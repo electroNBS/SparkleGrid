@@ -1,3 +1,4 @@
+
 import psycopg2
 from psycopg2 import OperationalError
 import numpy as np
@@ -32,7 +33,8 @@ def create_connection(host_name, user_name, password, db_name):
 # Function to get the max id from the table
 def get_max_id(connection):
     cursor = connection.cursor()
-    cursor.execute("SELECT MAX(id) FROM microgrid_back_measurementssix;")
+    # Updated table name to 'measurements_one' as defined in GridSense models
+    cursor.execute("SELECT MAX(id) FROM measurements_six;")
     max_id = cursor.fetchone()[0]
     cursor.close()
     return max_id if max_id else 0
@@ -44,27 +46,38 @@ def calculate_rms(data_array):
 # Function to insert a new record into the measurements table
 def insert_voltage_array(curr_id, connection, voltage_array, start_time):
     cursor = connection.cursor()
-    
+
     # Calculate RMS value for the voltage array
     rms_value = calculate_rms(voltage_array[:, 0])  # Assuming the voltage is in the first column
     print(rms_value)
 
-  
-
-   
-
-    
+    # **Explicitly convert rms_value to a Python float**
+    rms_value_float = float(rms_value)
 
 
     # Prepare the voltage array for insertion
     voltage_list = voltage_array.tolist()
     timestamp = start_time.isoformat()
+
     query = """
-    INSERT INTO microgrid_back_measurementssix(id, sensor_id, sensdata, time, rmsvalue, sname, stype, thd, pf)
+    INSERT INTO measurements_six(id, sensor_id, sensdata, time, rmsvalue, sname, stype, thd, pf)
     VALUES (%s, %s, %s::numeric[], %s, %s, %s, %s, %s, %s);
     """
-    voltage_array_str = str(voltage_list).replace('[', '{').replace(']', '}')
-    cursor.execute(query, (curr_id, sensor_id, voltage_array_str, timestamp, rms_value, 'Voltage','Voltage', 0, 0))
+    print("parameterized query being used")
+    print(query)
+
+
+    cursor.execute(query, (
+        curr_id,
+        sensor_id,
+        voltage_list, # Pass the Python list directly, psycopg2 will handle conversion for parameterized queries
+        timestamp,
+        rms_value_float, # Use the explicitly converted Python float here
+        'Voltage', # Corrected typo and using single quotes as string literals in SQL
+        'Voltage', # Corrected typo and using single quotes as string literals in SQL
+        0,
+        0
+    ))
     connection.commit()
     cursor.close()
 
@@ -79,7 +92,7 @@ def generate_synthetic_data():
     return formatted_voltage_array, start_time
 
 # Replace with your actual database credentials
-connection = create_connection("localhost", "sensor2", "microgrid", "sensors")
+connection = create_connection("localhost", "gridsense_user", "microgrid", "gridsense_db")
 
 try:
     while True:
@@ -89,7 +102,7 @@ try:
         insert_voltage_array(max_id, connection, voltage_array, start_time)
         max_id += 1
         print(f"Inserted a batch of {SAMPLES} values into the database. at t={start_time}")
-        
+
         time.sleep(1)  # Wait for 1 second before the next batch
 
 except KeyboardInterrupt:

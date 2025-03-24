@@ -3,3 +3,5 @@ frontend
 microfront
 GridWatch/.vscode
 GridWatch/node_modules
+GridSense/backvenv
+/home/mgrid/development/microgrid-iot/GridSense/GridSense/__pycache__

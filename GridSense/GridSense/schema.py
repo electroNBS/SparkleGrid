@@ -1,5 +1,5 @@
 import graphene
-from graphene_django.types import DjangoObjectType
+from graphene_django import DjangoObjectType
 from .models import MeasurementsOne
 
 class MeasurementsType(DjangoObjectType):
@@ -10,7 +10,7 @@ class Query(graphene.ObjectType):
     all_measurements = graphene.List(MeasurementsType)
 
     def resolve_all_measurements(self, info):
-        return Measurements.objects.all()
+        return MeasurementsOne.objects.all() # Corrected model name
 
 class CreateMeasurement(graphene.Mutation):
     class Arguments:
@@ -19,7 +19,7 @@ class CreateMeasurement(graphene.Mutation):
     measurement = graphene.Field(MeasurementsType)
 
     def mutate(self, info, sensdata):
-        measurement = Measurements.objects.create(sensdata=sensdata)
+        measurement = MeasurementsOne.objects.create(sensdata=sensdata) # Corrected model name
         return CreateMeasurement(measurement=measurement)
 
 class UpdateMeasurement(graphene.Mutation):
@@ -30,7 +30,7 @@ class UpdateMeasurement(graphene.Mutation):
     measurement = graphene.Field(MeasurementsType)
 
     def mutate(self, info, id, sensdata):
-        measurement = Measurements.objects.get(pk=id)
+        measurement = MeasurementsOne.objects.get(pk=id) # Corrected model name
         measurement.sensdata = sensdata
         measurement.save()
         return UpdateMeasurement(measurement=measurement)
@@ -42,7 +42,7 @@ class DeleteMeasurement(graphene.Mutation):
     ok = graphene.Boolean()
 
     def mutate(self, info, id):
-        measurement = Measurements.objects.get(pk=id)
+        measurement = MeasurementsOne.objects.get(pk=id) # Corrected model name
         measurement.delete()
         return DeleteMeasurement(ok=True)
 
